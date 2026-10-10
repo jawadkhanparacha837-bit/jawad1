@@ -1,0 +1,6 @@
+{
+  "name": "Medi Nova AI",
+  "description": "Bilingual AI health information & healthcare navigation platform for Pakistan featuring OpenStreetMap Healthcare Finder, Medicine Guide, Test Guide, and Health Library.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
