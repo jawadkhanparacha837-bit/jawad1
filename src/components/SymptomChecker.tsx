@@ -103,21 +103,21 @@ If high fever persists above 102°F or you develop shortness of breath, consult 
     const lines = text.split('\n');
     return lines.map((line, idx) => {
       if (line.startsWith('### ')) {
-        return <h3 key={idx} className="font-bold text-slate-900 text-base mt-4 mb-2">{line.replace('### ', '')}</h3>;
+        return <h3 key={idx} className="font-bold text-slate-900 dark:text-white text-base mt-4 mb-2">{line.replace('### ', '')}</h3>;
       }
       if (line.startsWith('#### ')) {
-        return <h4 key={idx} className="font-semibold text-slate-800 text-sm mt-3 mb-1.5">{line.replace('#### ', '')}</h4>;
+        return <h4 key={idx} className="font-semibold text-slate-800 dark:text-slate-200 text-sm mt-3 mb-1.5">{line.replace('#### ', '')}</h4>;
       }
       if (line.startsWith('- ') || line.startsWith('* ')) {
         return (
-          <li key={idx} className="ml-4 list-disc text-sm text-slate-700 my-1 leading-relaxed">
+          <li key={idx} className="ml-4 list-disc text-sm text-slate-700 dark:text-slate-300 my-1 leading-relaxed">
             {formatBold(line.substring(2))}
           </li>
         );
       }
       if (/^\d+\.\s/.test(line)) {
         return (
-          <div key={idx} className="text-sm text-slate-700 my-1.5 leading-relaxed pl-1">
+          <div key={idx} className="text-sm text-slate-700 dark:text-slate-300 my-1.5 leading-relaxed pl-1">
             {formatBold(line)}
           </div>
         );
@@ -126,7 +126,7 @@ If high fever persists above 102°F or you develop shortness of breath, consult 
         return <div key={idx} className="h-2" />;
       }
       return (
-        <p key={idx} className="text-sm text-slate-700 leading-relaxed my-1">
+        <p key={idx} className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed my-1">
           {formatBold(line)}
         </p>
       );
@@ -137,7 +137,7 @@ If high fever persists above 102°F or you develop shortness of breath, consult 
     const parts = text.split(/(\*\*.*?\*\*)/g);
     return parts.map((part, i) => {
       if (part.startsWith('**') && part.endsWith('**')) {
-        return <strong key={i} className="font-extrabold italic text-slate-900">{part.slice(2, -2)}</strong>;
+        return <strong key={i} className="font-extrabold italic text-slate-900 dark:text-white">{part.slice(2, -2)}</strong>;
       }
       return part;
     });
@@ -147,41 +147,41 @@ If high fever persists above 102°F or you develop shortness of breath, consult 
     <div className="max-w-2xl mx-auto space-y-6">
       
       {/* Top Banner Notice */}
-      <div className="bg-white border border-slate-200/90 rounded-xl p-4 flex items-center justify-between shadow-xs animate-fade-in-up">
-        <div className="flex items-center gap-2 text-xs text-slate-800 font-bold">
-          <Stethoscope className="w-4 h-4 text-cyan-600 shrink-0 animate-pulse-subtle" />
+      <div className="bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-xl p-4 flex items-center justify-between shadow-xs animate-fade-in-up">
+        <div className="flex items-center gap-2 text-xs text-slate-800 dark:text-slate-200 font-bold">
+          <Stethoscope className="w-4 h-4 text-cyan-600 dark:text-cyan-400 shrink-0 animate-pulse-subtle" />
           <span>
             {isUrdu ? (
               <>اے آئی کلینیکل اسسمنٹ سسٹم</>
             ) : (
-              <><span className="font-black italic text-cyan-600">AI</span> Clinical Assessment System</>
+              <><span className="font-black italic text-cyan-600 dark:text-cyan-400">AI</span> Clinical Assessment System</>
             )}
           </span>
         </div>
-        <div className="flex items-center gap-1.5 text-xs text-slate-500 font-bold">
-          <span className={`px-2.5 py-0.5 rounded-full transition-all duration-200 ${step === 1 ? 'bg-cyan-600 text-white font-extrabold shadow-3xs scale-105' : 'bg-slate-100'}`}>1</span>
+        <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 font-bold">
+          <span className={`px-2.5 py-0.5 rounded-full transition-all duration-200 ${step === 1 ? 'bg-cyan-600 text-white font-extrabold shadow-3xs scale-105' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'}`}>1</span>
           <span>→</span>
-          <span className={`px-2.5 py-0.5 rounded-full transition-all duration-200 ${step === 2 ? 'bg-cyan-600 text-white font-extrabold shadow-3xs scale-105' : 'bg-slate-100'}`}>2</span>
+          <span className={`px-2.5 py-0.5 rounded-full transition-all duration-200 ${step === 2 ? 'bg-cyan-600 text-white font-extrabold shadow-3xs scale-105' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'}`}>2</span>
           <span>→</span>
-          <span className={`px-2.5 py-0.5 rounded-full transition-all duration-200 ${step === 3 ? 'bg-cyan-600 text-white font-extrabold shadow-3xs scale-105' : 'bg-slate-100'}`}>3</span>
+          <span className={`px-2.5 py-0.5 rounded-full transition-all duration-200 ${step === 3 ? 'bg-cyan-600 text-white font-extrabold shadow-3xs scale-105' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'}`}>3</span>
         </div>
       </div>
 
       {/* Main Flow Card */}
-      <div key={step} className="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-6 sm:p-8 space-y-6 animate-section-open transition-all hover:shadow-md">
+      <div key={step} className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/90 dark:border-slate-800 shadow-xs p-6 sm:p-8 space-y-6 animate-section-open transition-all hover:shadow-md">
         
         {/* Step 1: Select Symptoms */}
         {step === 1 && (
           <div className="space-y-6">
             <div>
-              <div className="flex items-center gap-2 text-cyan-600 font-extrabold text-xs uppercase tracking-wider mb-1">
+              <div className="flex items-center gap-2 text-cyan-600 dark:text-cyan-400 font-extrabold text-xs uppercase tracking-wider mb-1">
                 <Activity className="w-4 h-4" />
                 <span>{isUrdu ? 'مرحلہ 1: علامات کا انتخاب' : 'Step 1: Symptom Checklist'}</span>
               </div>
-              <h2 className="text-2xl font-extrabold text-slate-900 tracking-tight">
+              <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
                 {isUrdu ? 'آپ کیسی علامات محسوس کر رہے ہیں؟' : 'What symptoms are you experiencing?'}
               </h2>
-              <p className="text-xs sm:text-sm text-slate-600 font-medium mt-1">
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 font-medium mt-1">
                 {isUrdu
                   ? 'ان علامات پر کلک کریں جو آپ کو محسوس ہو رہی ہیں، یا اپنا کوئی اضافی مسئلہ لکھیں۔'
                   : 'Select the primary symptoms you are feeling to begin your guided clinical evaluation.'}
@@ -197,12 +197,12 @@ If high fever persists above 102°F or you develop shortness of breath, consult 
                     onClick={() => toggleSymptom(item.id)}
                     className={`p-3.5 rounded-xl border text-left flex items-center justify-between transition-all duration-200 cursor-pointer active:scale-98 ${
                       checked
-                        ? 'bg-cyan-50 border-cyan-500 text-cyan-950 font-bold ring-1 ring-cyan-500 shadow-3xs'
-                        : 'bg-slate-50 border-slate-200/90 text-slate-800 font-semibold hover:bg-slate-100 hover:border-slate-300'
+                        ? 'bg-cyan-50 dark:bg-cyan-950/60 border-cyan-500 text-cyan-950 dark:text-cyan-100 font-bold ring-1 ring-cyan-500 shadow-3xs'
+                        : 'bg-slate-50 dark:bg-slate-800/80 border-slate-200/90 dark:border-slate-700 text-slate-800 dark:text-slate-200 font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 hover:border-slate-300 dark:hover:border-slate-600'
                     }`}
                   >
                     <span className="text-xs sm:text-sm">{isUrdu ? item.labelUr : item.label}</span>
-                    <div className={`w-5 h-5 rounded-md border flex items-center justify-center transition-all ${checked ? 'bg-cyan-600 border-cyan-600 text-white shadow-3xs' : 'border-slate-300 bg-white'}`}>
+                    <div className={`w-5 h-5 rounded-md border flex items-center justify-center transition-all ${checked ? 'bg-cyan-600 border-cyan-600 text-white shadow-3xs' : 'border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900'}`}>
                       {checked && <CheckCircle className="w-3.5 h-3.5" />}
                     </div>
                   </button>
@@ -218,21 +218,21 @@ If high fever persists above 102°F or you develop shortness of breath, consult 
                 onChange={(e) => setCustomSymptom(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleAddCustomSymptom()}
                 placeholder={isUrdu ? 'کوئی اور علامت لکھیں (مثلاً کمر درد، گلا خراب)...' : 'Add another symptom (e.g. back pain, sore throat)...'}
-                className="flex-1 px-3 py-2 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                className="flex-1 px-3 py-2 text-xs sm:text-sm bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-200 dark:border-slate-700 rounded-xl placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-500"
               />
               <button
                 onClick={handleAddCustomSymptom}
                 disabled={!customSymptom.trim()}
-                className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl disabled:opacity-40"
+                className="px-3.5 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold rounded-xl disabled:opacity-40 cursor-pointer"
               >
                 + Add
               </button>
             </div>
 
             {hasEmergency && (
-              <div className="p-4 bg-red-50 border border-red-200 rounded-xl space-y-2 text-red-950 text-xs sm:text-sm">
-                <div className="flex items-center gap-2 font-bold text-red-700">
-                  <AlertTriangle className="w-4 h-4 text-red-600" />
+              <div className="p-4 bg-red-50 dark:bg-red-950/60 border border-red-200 dark:border-red-800/80 rounded-xl space-y-2 text-red-950 dark:text-red-100 text-xs sm:text-sm">
+                <div className="flex items-center gap-2 font-bold text-red-700 dark:text-red-300">
+                  <AlertTriangle className="w-4 h-4 text-red-600 dark:text-red-400" />
                   <span>{isUrdu ? 'ہنگامی علامت کا انتخاب!' : 'Emergency Symptom Detected'}</span>
                 </div>
                 <p>
@@ -252,7 +252,7 @@ If high fever persists above 102°F or you develop shortness of breath, consult 
             <button
               onClick={() => setStep(2)}
               disabled={selectedSymptoms.length === 0}
-              className="w-full py-3 bg-cyan-600 hover:bg-cyan-700 text-white font-semibold text-sm rounded-xl transition-colors disabled:opacity-40 flex items-center justify-center gap-2 shadow-xs"
+              className="w-full py-3 bg-cyan-600 hover:bg-cyan-700 text-white font-semibold text-sm rounded-xl transition-colors disabled:opacity-40 flex items-center justify-center gap-2 shadow-xs cursor-pointer"
             >
               <span>{isUrdu ? 'اگلا مرحلہ: دورانیہ اور شدت' : 'Next: Duration & Severity'}</span>
               <ChevronRight className="w-4 h-4" />
@@ -264,17 +264,17 @@ If high fever persists above 102°F or you develop shortness of breath, consult 
         {step === 2 && (
           <div className="space-y-6">
             <div>
-              <div className="flex items-center gap-2 text-cyan-600 font-bold text-xs uppercase tracking-wider mb-1">
+              <div className="flex items-center gap-2 text-cyan-600 dark:text-cyan-400 font-bold text-xs uppercase tracking-wider mb-1">
                 <Stethoscope className="w-4 h-4" />
                 <span>{isUrdu ? 'مرحلہ 2: دورانیہ اور تفصیلات' : 'Step 2: Duration & Details'}</span>
               </div>
-              <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
+              <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
                 {isUrdu ? 'علامات کی تفصیل اور شدت' : 'Provide Timeline & Severity'}
               </h2>
             </div>
 
             <div className="space-y-2">
-              <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block">
+              <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
                 {isUrdu ? 'یہ علامات کب سے ظاہر ہیں؟' : 'How long have you had these symptoms?'}
               </label>
               <div className="grid grid-cols-3 gap-2">
@@ -282,10 +282,10 @@ If high fever persists above 102°F or you develop shortness of breath, consult 
                   <button
                     key={d}
                     onClick={() => setDuration(d)}
-                    className={`py-2 px-3 text-xs font-semibold rounded-xl border transition-all ${
+                    className={`py-2 px-3 text-xs font-semibold rounded-xl border transition-all cursor-pointer ${
                       duration === d
                         ? 'bg-cyan-600 text-white border-cyan-600 shadow-xs'
-                        : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
+                        : 'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700'
                     }`}
                   >
                     {d}
@@ -295,7 +295,7 @@ If high fever persists above 102°F or you develop shortness of breath, consult 
             </div>
 
             <div className="space-y-2">
-              <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block">
+              <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
                 {isUrdu ? 'تکلیف کی شدت:' : 'Severity of discomfort:'}
               </label>
               <div className="grid grid-cols-3 gap-2">
@@ -303,10 +303,10 @@ If high fever persists above 102°F or you develop shortness of breath, consult 
                   <button
                     key={s}
                     onClick={() => setSeverity(s)}
-                    className={`py-2 px-3 text-xs font-semibold rounded-xl border transition-all ${
+                    className={`py-2 px-3 text-xs font-semibold rounded-xl border transition-all cursor-pointer ${
                       severity === s
                         ? s === 'Severe' ? 'bg-red-600 text-white border-red-600' : 'bg-cyan-600 text-white border-cyan-600'
-                        : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
+                        : 'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700'
                     }`}
                   >
                     {s}
@@ -316,7 +316,7 @@ If high fever persists above 102°F or you develop shortness of breath, consult 
             </div>
 
             <div className="space-y-2">
-              <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block">
+              <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
                 {isUrdu ? 'اضافی نوٹ یا ادویات (اختیاری):' : 'Additional context or current medications (optional):'}
               </label>
               <textarea
@@ -324,21 +324,21 @@ If high fever persists above 102°F or you develop shortness of breath, consult 
                 onChange={(e) => setAdditionalNotes(e.target.value)}
                 rows={2}
                 placeholder={isUrdu ? 'کوئی موجودہ بیماری جیسے شوگر، بلڈ پریشر وغیرہ...' : 'e.g. taking blood pressure medicine, allergic to penicillin...'}
-                className="w-full p-3 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                className="w-full p-3 text-xs sm:text-sm bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-200 dark:border-slate-700 rounded-xl placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-500"
               />
             </div>
 
             <div className="flex gap-3 pt-2">
               <button
                 onClick={() => setStep(1)}
-                className="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl"
+                className="px-5 py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold rounded-xl cursor-pointer"
               >
                 Back
               </button>
               <button
                 onClick={handleAnalyze}
                 disabled={isSubmitting}
-                className="flex-1 py-3 bg-cyan-600 hover:bg-cyan-700 text-white text-sm font-semibold rounded-xl transition-colors flex items-center justify-center gap-2 shadow-xs"
+                className="flex-1 py-3 bg-cyan-600 hover:bg-cyan-700 text-white text-sm font-semibold rounded-xl transition-colors flex items-center justify-center gap-2 shadow-xs cursor-pointer"
               >
                 {isSubmitting ? (
                   <>
@@ -356,40 +356,40 @@ If high fever persists above 102°F or you develop shortness of breath, consult 
         {/* Step 3: Full AI Clinical Assessment Result */}
         {step === 3 && aiAnalysisResult && (
           <div className="space-y-6">
-            <div className="border-b border-slate-100 pb-4">
-              <div className="flex items-center gap-2 text-emerald-600 font-bold text-xs uppercase tracking-wider mb-1">
+            <div className="border-b border-slate-100 dark:border-slate-800 pb-4">
+              <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-bold text-xs uppercase tracking-wider mb-1">
                 <CheckCircle className="w-4 h-4" />
                 <span>{isUrdu ? 'تجزیہ مکمل ہو چکا ہے' : 'AI Analysis Completed'}</span>
               </div>
-              <h2 className="text-2xl font-bold text-slate-900">
+              <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
                 {isUrdu ? 'طبی تجزیاتی رپورٹ' : 'Clinical Diagnostic Insights'}
               </h2>
             </div>
 
-            <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-2 leading-relaxed">
+            <div className="bg-slate-50 dark:bg-slate-800/70 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-2 leading-relaxed">
               {renderFormattedMarkdown(aiAnalysisResult)}
             </div>
 
-            <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-slate-100">
+            <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-slate-100 dark:border-slate-800">
               <button
                 onClick={() => {
                   setStep(1);
                   setAiAnalysisResult(null);
                 }}
-                className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition-colors"
+                className="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold rounded-xl transition-colors cursor-pointer"
               >
                 ← Check Another Symptom
               </button>
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => onNavigate('medicines')}
-                  className="px-4 py-2 bg-blue-50 text-blue-700 hover:bg-blue-100 text-xs font-semibold rounded-xl border border-blue-200 transition-colors"
+                  className="px-4 py-2 bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/60 text-xs font-semibold rounded-xl border border-blue-200 dark:border-blue-800 transition-colors cursor-pointer"
                 >
                   Medicine Guide
                 </button>
                 <button
                   onClick={() => onNavigate('finder')}
-                  className="px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white text-xs font-semibold rounded-xl shadow-xs transition-colors flex items-center gap-1.5"
+                  className="px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white text-xs font-semibold rounded-xl shadow-xs transition-colors flex items-center gap-1.5 cursor-pointer"
                 >
                   <MapPin className="w-3.5 h-3.5" />
                   <span>Find Nearby Doctor</span>

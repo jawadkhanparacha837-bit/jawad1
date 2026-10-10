@@ -1,30 +1,80 @@
-import { HealthcareFacility } from '../types';
-import { VERIFIED_FACILITIES, PAKISTAN_CITIES, calculateDistanceKm } from '../data/hospitalsData';
+import { HealthcareFacility, SupportedCity } from '../types';
+import {
+  VERIFIED_FACILITIES,
+  PAKISTAN_CITIES,
+  calculateDistanceKm,
+  computeFacilityQualityScore,
+  findClosestCity
+} from '../data/hospitalsData';
 
 export interface GeoLocationResult {
   displayName: string;
+  city: SupportedCity;
+  localityName?: string;
   lat: number;
   lon: number;
+  isExactLocality: boolean;
 }
 
 /**
- * Searches for a location in Pakistan using OpenStreetMap Nominatim.
- * Falls back safely to predefined Pakistan cities if Nominatim is unreachable or rate-limited.
+ * Searches for a city, sector, or locality in Pakistan using our verified locality database
+ * first for instant, accurate city/landmark matching, then OpenStreetMap Nominatim.
  */
 export async function searchLocationNominatim(query: string): Promise<GeoLocationResult[]> {
   const trimmed = query.trim().toLowerCase();
   if (!trimmed) return [];
 
-  // 1. Try free public OpenStreetMap Nominatim API
+  const localMatches: GeoLocationResult[] = [];
+
+  // 1. Check exact or partial matches in our verified Pakistan Cities & Localities
+  for (const cityInfo of PAKISTAN_CITIES) {
+    const cityLower = cityInfo.name.toLowerCase();
+
+    // Check localities inside this city first (e.g. "F-8 Markaz", "Johar Town", "Clifton", "Hayatabad")
+    for (const loc of cityInfo.localities) {
+      const locLower = loc.name.toLowerCase();
+      if (
+        locLower.includes(trimmed) ||
+        trimmed.includes(locLower.split('/')[0].trim()) ||
+        (trimmed.includes(cityLower) && trimmed.replace(cityLower, '').trim().length > 1 && locLower.includes(trimmed.replace(cityLower, '').trim()))
+      ) {
+        localMatches.push({
+          displayName: `${loc.name}, ${cityInfo.name}`,
+          city: cityInfo.name,
+          localityName: loc.name,
+          lat: loc.lat,
+          lon: loc.lon,
+          isExactLocality: true
+        });
+      }
+    }
+
+    // Check city name match
+    if (cityLower === trimmed || cityLower.includes(trimmed) || trimmed === `${cityLower}, pakistan`) {
+      localMatches.push({
+        displayName: `${cityInfo.name}, Pakistan`,
+        city: cityInfo.name,
+        lat: cityInfo.lat,
+        lon: cityInfo.lon,
+        isExactLocality: false
+      });
+    }
+  }
+
+  if (localMatches.length > 0) {
+    return localMatches;
+  }
+
+  // 2. Try free public OpenStreetMap Nominatim API for any other landmark in Pakistan
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 4000);
+    const timeoutId = setTimeout(() => controller.abort(), 3500);
 
     const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(trimmed + ', Pakistan')}&limit=5`;
     const res = await fetch(url, {
       signal: controller.signal,
       headers: {
-        'Accept': 'application/json'
+        Accept: 'application/json'
       }
     });
     clearTimeout(timeoutId);
@@ -32,131 +82,93 @@ export async function searchLocationNominatim(query: string): Promise<GeoLocatio
     if (res.ok) {
       const data = await res.json();
       if (Array.isArray(data) && data.length > 0) {
-        return data.map((item: any) => ({
-          displayName: item.display_name,
-          lat: parseFloat(item.lat),
-          lon: parseFloat(item.lon)
-        }));
+        return data.map((item: any) => {
+          const lat = parseFloat(item.lat);
+          const lon = parseFloat(item.lon);
+          const closest = findClosestCity(lat, lon);
+          const firstPart = String(item.display_name || '').split(',')[0].trim();
+          const isCityItself = firstPart.toLowerCase() === closest.city.name.toLowerCase();
+
+          return {
+            displayName: item.display_name,
+            city: closest.city.name,
+            localityName: isCityItself ? undefined : firstPart,
+            lat,
+            lon,
+            isExactLocality: !isCityItself
+          };
+        });
       }
     }
   } catch {
-    // Network / timeout / CORS fallback
+    // Network / timeout fallback
   }
 
-  // 2. Reliable local fallback matching Pakistan cities
-  const matched = PAKISTAN_CITIES.filter(city => 
-    city.name.toLowerCase().includes(trimmed) || trimmed.includes(city.name.toLowerCase())
-  );
+  return [];
+}
 
-  if (matched.length > 0) {
-    return matched.map(m => ({
-      displayName: `${m.name}, Pakistan`,
-      lat: m.lat,
-      lon: m.lon
-    }));
-  }
-
-  // Default fallback to Islamabad
-  return [
-    {
-      displayName: 'Islamabad, Pakistan',
-      lat: 33.6844,
-      lon: 73.0479
-    }
-  ];
+export interface FetchCityHealthcareOptions {
+  city: SupportedCity;
+  category: 'All' | 'Hospitals' | 'Clinics' | 'Pharmacies' | 'Emergency';
+  referenceCoords?: { lat: number; lon: number; label: string } | null;
+  includeLiveOsm?: boolean;
 }
 
 /**
- * Fetches healthcare places near a coordinate using OpenStreetMap Overpass API,
- * with reliable fallback to our curated verified facilities dataset.
- * Does NOT call OpenAI.
+ * Returns verified healthcare facilities strictly for the selected city and category.
+ * Never mixes facilities from different cities, and strictly separates Hospitals, Clinics, and Pharmacies.
+ * Calculates accurate Haversine distances ONLY when a valid reference coordinate is provided.
  */
 export async function fetchNearbyHealthcare(
   lat: number,
   lon: number,
-  radiusMeters: number = 10000,
-  category: string = 'All'
+  _radiusMeters: number = 12000,
+  category: string = 'All',
+  selectedCity?: SupportedCity,
+  referencePoint?: { lat: number; lon: number; label: string } | null
 ): Promise<HealthcareFacility[]> {
-  let liveFacilities: HealthcareFacility[] = [];
+  // Determine target city strictly
+  const targetCity: SupportedCity = selectedCity || findClosestCity(lat, lon).city.name;
 
-  try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 5000);
-
-    const amenityFilter = category === 'Hospitals' 
-      ? 'hospital' 
-      : category === 'Clinics' 
-        ? 'clinic|doctors' 
-        : category === 'Pharmacies'
-          ? 'pharmacy'
-          : 'hospital|clinic|pharmacy|doctors';
-
-    const overpassQuery = `[out:json][timeout:5];(node["amenity"~"${amenityFilter}"](around:${radiusMeters},${lat},${lon});way["amenity"~"${amenityFilter}"](around:${radiusMeters},${lat},${lon}););out center 30;`;
-    const overpassUrl = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(overpassQuery)}`;
-
-    const res = await fetch(overpassUrl, {
-      signal: controller.signal
-    });
-    clearTimeout(timeoutId);
-
-    if (res.ok) {
-      const data = await res.json();
-      if (data && Array.isArray(data.elements)) {
-        liveFacilities = data.elements
-          .filter((el: any) => el.tags && el.tags.name)
-          .map((el: any) => {
-            const itemLat = el.lat || (el.center && el.center.lat);
-            const itemLon = el.lon || (el.center && el.center.lon);
-            const amenity = el.tags.amenity || 'clinic';
-            const facilityType: HealthcareFacility['type'] = 
-              amenity === 'hospital' ? 'hospital' : 
-              amenity === 'pharmacy' ? 'pharmacy' : 'clinic';
-
-            return {
-              id: `osm-${el.id}`,
-              name: el.tags.name,
-              nameUr: el.tags['name:ur'] || undefined,
-              type: facilityType,
-              address: [
-                el.tags['addr:street'],
-                el.tags['addr:suburb'] || el.tags['addr:district'],
-                el.tags['addr:city']
-              ].filter(Boolean).join(', ') || 'OpenStreetMap Verified Location',
-              city: el.tags['addr:city'] || 'Nearby',
-              lat: itemLat,
-              lon: itemLon,
-              phone: el.tags.phone || el.tags['contact:phone'],
-              hasEmergency: el.tags.emergency === 'yes' || amenity === 'hospital',
-              openHours: el.tags.opening_hours || (amenity === 'hospital' ? '24/7' : undefined),
-              distanceKm: calculateDistanceKm(lat, lon, itemLat, itemLon)
-            };
-          });
-      }
+  // 1. Filter verified dataset strictly by city and category
+  const cityVerified = VERIFIED_FACILITIES.filter(fac => {
+    // Strict city isolation: never mix Islamabad with Lahore/Karachi/Rawalpindi, etc.
+    if (fac.city.toLowerCase() !== targetCity.toLowerCase()) {
+      return false;
     }
-  } catch {
-    // Overpass is optional public API; fall back to verified directory seamlessly
-  }
 
-  // Combine with verified dataset sorted by distance from the requested center
-  const allVerifiedWithDist = VERIFIED_FACILITIES.map(fac => ({
-    ...fac,
-    distanceKm: calculateDistanceKm(lat, lon, fac.lat, fac.lon)
-  }));
-
-  // Merge and deduplicate by name
-  const existingNames = new Set(liveFacilities.map(f => f.name.toLowerCase()));
-  const filteredVerified = allVerifiedWithDist.filter(fac => {
-    if (existingNames.has(fac.name.toLowerCase())) return false;
-    if (category === 'Hospitals' && fac.type !== 'hospital' && fac.type !== 'emergency') return false;
-    if (category === 'Clinics' && fac.type !== 'clinic') return false;
-    if (category === 'Pharmacies' && fac.type !== 'pharmacy') return false;
-    if (category === 'Emergency' && !fac.hasEmergency) return false;
+    // Strict category separation
+    if (category === 'Hospitals') return fac.type === 'hospital';
+    if (category === 'Clinics') return fac.type === 'clinic';
+    if (category === 'Pharmacies') return fac.type === 'pharmacy';
+    if (category === 'Emergency') return fac.hasEmergency === true || fac.is24Hours === true;
     return true;
   });
 
-  const combined = [...liveFacilities, ...filteredVerified];
-  
-  // Sort by closest distance first
-  combined.sort((a, b) => (a.distanceKm ?? 999) - (b.distanceKm ?? 999));
-  return combined;
+  // 2. Attach accurate Haversine distance ONLY if a valid reference point is supplied
+  const enrichedFacilities: HealthcareFacility[] = cityVerified.map(fac => {
+    if (referencePoint && fac.lat !== undefined && fac.lon !== undefined) {
+      return {
+        ...fac,
+        distanceKm: calculateDistanceKm(referencePoint.lat, referencePoint.lon, fac.lat, fac.lon),
+        distanceSourceLabel: referencePoint.label
+      };
+    }
+    return {
+      ...fac,
+      distanceKm: undefined,
+      distanceSourceLabel: undefined
+    };
+  });
+
+  // 3. Default sort: If referencePoint is GPS ("Your GPS Location"), sort nearest-first;
+  // otherwise rank by composite medical quality score (services, rating, review volume, verification).
+  enrichedFacilities.sort((a, b) => {
+    if (referencePoint?.label === 'Your GPS Location' && a.distanceKm !== undefined && b.distanceKm !== undefined) {
+      return a.distanceKm - b.distanceKm;
+    }
+    return computeFacilityQualityScore(b) - computeFacilityQualityScore(a);
+  });
+
+  return enrichedFacilities;
 }

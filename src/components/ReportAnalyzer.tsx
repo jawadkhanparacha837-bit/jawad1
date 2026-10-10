@@ -109,21 +109,21 @@ export const ReportAnalyzer: React.FC<ReportAnalyzerProps> = ({ language, onNavi
     const lines = text.split('\n');
     return lines.map((line, idx) => {
       if (line.startsWith('### ')) {
-        return <h3 key={idx} className="font-bold text-slate-900 text-base mt-4 mb-2">{line.replace('### ', '')}</h3>;
+        return <h3 key={idx} className="font-bold text-slate-900 dark:text-white text-base mt-4 mb-2">{line.replace('### ', '')}</h3>;
       }
       if (line.startsWith('#### ')) {
-        return <h4 key={idx} className="font-semibold text-slate-800 text-sm mt-3 mb-1.5">{line.replace('#### ', '')}</h4>;
+        return <h4 key={idx} className="font-semibold text-slate-800 dark:text-slate-200 text-sm mt-3 mb-1.5">{line.replace('#### ', '')}</h4>;
       }
       if (line.startsWith('- ') || line.startsWith('* ')) {
         return (
-          <li key={idx} className="ml-4 list-disc text-sm text-slate-700 my-1 leading-relaxed">
+          <li key={idx} className="ml-4 list-disc text-sm text-slate-700 dark:text-slate-300 my-1 leading-relaxed">
             {formatBold(line.substring(2))}
           </li>
         );
       }
       if (/^\d+\.\s/.test(line)) {
         return (
-          <div key={idx} className="text-sm text-slate-700 my-1.5 leading-relaxed pl-1">
+          <div key={idx} className="text-sm text-slate-700 dark:text-slate-300 my-1.5 leading-relaxed pl-1">
             {formatBold(line)}
           </div>
         );
@@ -132,7 +132,7 @@ export const ReportAnalyzer: React.FC<ReportAnalyzerProps> = ({ language, onNavi
         return <div key={idx} className="h-2" />;
       }
       return (
-        <p key={idx} className="text-sm text-slate-700 leading-relaxed my-1">
+        <p key={idx} className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed my-1">
           {formatBold(line)}
         </p>
       );
@@ -143,7 +143,7 @@ export const ReportAnalyzer: React.FC<ReportAnalyzerProps> = ({ language, onNavi
     const parts = text.split(/(\*\*.*?\*\*)/g);
     return parts.map((part, i) => {
       if (part.startsWith('**') && part.endsWith('**')) {
-        return <strong key={i} className="font-semibold text-slate-900">{part.slice(2, -2)}</strong>;
+        return <strong key={i} className="font-semibold text-slate-900 dark:text-white">{part.slice(2, -2)}</strong>;
       }
       return part;
     });
@@ -153,36 +153,36 @@ export const ReportAnalyzer: React.FC<ReportAnalyzerProps> = ({ language, onNavi
     <div className="max-w-3xl mx-auto space-y-6">
       
       {/* Top Banner Notice */}
-      <div className="bg-white border border-slate-200/90 rounded-xl p-4 flex items-center justify-between shadow-xs animate-fade-in-up">
-        <div className="flex items-center gap-2 text-xs text-slate-800 font-bold">
-          <FileCheck className="w-4 h-4 text-cyan-600 shrink-0 animate-pulse-subtle" />
+      <div className="bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-xl p-4 flex items-center justify-between shadow-xs animate-fade-in-up">
+        <div className="flex items-center gap-2 text-xs text-slate-800 dark:text-slate-200 font-bold">
+          <FileCheck className="w-4 h-4 text-cyan-600 dark:text-cyan-400 shrink-0 animate-pulse-subtle" />
           <span>
             {isUrdu ? (
               <>اے آئی میڈیکل رپورٹ اینالائزر فعال ہے</>
             ) : (
-              <><span className="font-black italic text-cyan-600">AI</span> Diagnostic &amp; Lab Report Interpretation Active</>
+              <><span className="font-black italic text-cyan-600 dark:text-cyan-400">AI</span> Diagnostic &amp; Lab Report Interpretation Active</>
             )}
           </span>
         </div>
         <button
           onClick={() => onNavigate('tests')}
-          className="text-cyan-700 font-extrabold hover:underline text-xs hover:translate-x-0.5 transition-transform cursor-pointer"
+          className="text-cyan-700 dark:text-cyan-400 font-extrabold hover:underline text-xs hover:translate-x-0.5 transition-transform cursor-pointer"
         >
           {isUrdu ? 'ٹیسٹ گائیڈ دیکھیں →' : 'View Test Guide →'}
         </button>
       </div>
 
       {/* Main Upload / Input Box */}
-      <div className="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-6 sm:p-8 space-y-6 animate-fade-in-up animation-delay-100 transition-all hover:shadow-md">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/90 dark:border-slate-800 shadow-xs p-6 sm:p-8 space-y-6 animate-fade-in-up animation-delay-100 transition-all hover:shadow-md">
         <div>
-          <h2 className="text-2xl font-extrabold text-slate-900 tracking-tight">
+          <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
             {isUrdu ? (
-              <>لیب رپورٹ کا <span className="font-black italic text-cyan-600">اے آئی</span> تجزیہ</>
+              <>لیب رپورٹ کا <span className="font-black italic text-cyan-600 dark:text-cyan-400">اے آئی</span> تجزیہ</>
             ) : (
-              <><span className="font-black italic text-cyan-600">AI</span> Lab Report Analyzer</>
+              <><span className="font-black italic text-cyan-600 dark:text-cyan-400">AI</span> Lab Report Analyzer</>
             )}
           </h2>
-          <p className="text-xs sm:text-sm text-slate-600 font-medium mt-1 leading-relaxed">
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 font-medium mt-1 leading-relaxed">
             {isUrdu
               ? <>اپنے بلڈ ٹیسٹ، <span className="font-bold italic">سی بی سی</span>، شوگر یا کولیسٹرول کی رپورٹ کی تصویر اپ لوڈ کریں یا رپورٹ کی معلومات درج کریں۔</>
               : <>Upload a report image/PDF (<span className="font-bold italic">CBC</span>, Blood Sugar, Lipid, <span className="font-bold italic">LFT</span>) or paste lab values for an instant plain-language breakdown.</>}
@@ -191,22 +191,22 @@ export const ReportAnalyzer: React.FC<ReportAnalyzerProps> = ({ language, onNavi
 
         {/* Quick Sample Buttons */}
         <div className="flex flex-wrap items-center gap-2 text-xs">
-          <span className="font-bold text-slate-700">Quick Test Samples:</span>
+          <span className="font-bold text-slate-700 dark:text-slate-300">Quick Test Samples:</span>
           <button
             onClick={() => handleLoadSample('cbc')}
-            className="px-3 py-1.5 bg-cyan-50 hover:bg-cyan-100 text-cyan-900 rounded-lg font-bold border border-cyan-200/80 transition-all active:scale-95 cursor-pointer shadow-3xs"
+            className="px-3 py-1.5 bg-cyan-50 dark:bg-cyan-950/70 hover:bg-cyan-100 dark:hover:bg-cyan-900/70 text-cyan-900 dark:text-cyan-200 rounded-lg font-bold border border-cyan-200/80 dark:border-cyan-800/80 transition-all active:scale-95 cursor-pointer shadow-3xs"
           >
             <span className="font-black italic">CBC</span> Report (Low Platelets)
           </button>
           <button
             onClick={() => handleLoadSample('lipid')}
-            className="px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-900 rounded-lg font-bold border border-blue-200/80 transition-all active:scale-95 cursor-pointer shadow-3xs"
+            className="px-3 py-1.5 bg-blue-50 dark:bg-blue-950/70 hover:bg-blue-100 dark:hover:bg-blue-900/70 text-blue-900 dark:text-blue-200 rounded-lg font-bold border border-blue-200/80 dark:border-blue-800/80 transition-all active:scale-95 cursor-pointer shadow-3xs"
           >
             Lipid Profile (High Cholesterol)
           </button>
           <button
             onClick={() => handleLoadSample('sugar')}
-            className="px-3 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-900 rounded-lg font-bold border border-amber-200/80 transition-all active:scale-95 cursor-pointer shadow-3xs"
+            className="px-3 py-1.5 bg-amber-50 dark:bg-amber-950/70 hover:bg-amber-100 dark:hover:bg-amber-900/70 text-amber-900 dark:text-amber-200 rounded-lg font-bold border border-amber-200/80 dark:border-amber-800/80 transition-all active:scale-95 cursor-pointer shadow-3xs"
           >
             Diabetes (<span className="font-black italic">HbA1c</span> 7.4%)
           </button>
@@ -217,8 +217,8 @@ export const ReportAnalyzer: React.FC<ReportAnalyzerProps> = ({ language, onNavi
           htmlFor="report-file-input"
           className={`border-2 border-dashed rounded-2xl p-6 sm:p-8 flex flex-col items-center justify-center text-center cursor-pointer transition-all ${
             selectedFile
-              ? 'border-cyan-500 bg-cyan-50/40'
-              : 'border-slate-300 hover:border-cyan-400 bg-slate-50 hover:bg-slate-100/60'
+              ? 'border-cyan-500 bg-cyan-50/40 dark:bg-cyan-950/40'
+              : 'border-slate-300 dark:border-slate-700 hover:border-cyan-400 dark:hover:border-cyan-500 bg-slate-50 dark:bg-slate-800/60 hover:bg-slate-100/60 dark:hover:bg-slate-800'
           }`}
         >
           <input
@@ -230,20 +230,20 @@ export const ReportAnalyzer: React.FC<ReportAnalyzerProps> = ({ language, onNavi
           />
           {selectedFile ? (
             <div className="space-y-2">
-              <div className="w-12 h-12 rounded-full bg-cyan-100 text-cyan-700 flex items-center justify-center mx-auto">
+              <div className="w-12 h-12 rounded-full bg-cyan-100 dark:bg-cyan-950 text-cyan-700 dark:text-cyan-300 flex items-center justify-center mx-auto">
                 <FileText className="w-6 h-6" />
               </div>
-              <p className="text-sm font-bold text-slate-900">{selectedFile.name}</p>
-              <p className="text-xs text-slate-500">
+              <p className="text-sm font-bold text-slate-900 dark:text-white">{selectedFile.name}</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
                 {(selectedFile.size / 1024).toFixed(1)} KB • Ready for AI interpretation
               </p>
             </div>
           ) : (
             <div className="space-y-2">
-              <div className="w-12 h-12 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto">
+              <div className="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-400 flex items-center justify-center mx-auto">
                 <Upload className="w-6 h-6" />
               </div>
-              <p className="text-sm font-semibold text-slate-800">
+              <p className="text-sm font-semibold text-slate-800 dark:text-slate-200">
                 {isUrdu ? 'رپورٹ فائل منتخب کریں یا یہاں ڈراپ کریں' : 'Click to select report image or PDF'}
               </p>
               <p className="text-xs text-slate-400">JPG, PNG, WebP, PDF up to 15MB</p>
@@ -253,7 +253,7 @@ export const ReportAnalyzer: React.FC<ReportAnalyzerProps> = ({ language, onNavi
 
         {/* Text Area for manual text / transcribed results */}
         <div className="space-y-1.5">
-          <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block">
+          <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
             {isUrdu ? 'یا ٹیسٹ کے نتائج یہاں درج کریں:' : 'Or paste/type test values:'}
           </label>
           <textarea
@@ -261,7 +261,7 @@ export const ReportAnalyzer: React.FC<ReportAnalyzerProps> = ({ language, onNavi
             onChange={(e) => setManualText(e.target.value)}
             rows={4}
             placeholder={isUrdu ? 'مثلاً Hemoglobin: 10.5, WBC: 12500, Platelets: 98000...' : 'e.g. Hemoglobin: 10.5 g/dL, WBC: 12,800, Platelets: 98,000...'}
-            className="w-full p-3.5 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500 font-mono"
+            className="w-full p-3.5 text-xs sm:text-sm bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-200 dark:border-slate-700 rounded-xl placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 font-mono"
           />
         </div>
 
@@ -269,7 +269,7 @@ export const ReportAnalyzer: React.FC<ReportAnalyzerProps> = ({ language, onNavi
         <button
           onClick={handleAnalyzeReport}
           disabled={analyzing || (!selectedFile && !manualText.trim())}
-          className="w-full py-3.5 bg-cyan-600 hover:bg-cyan-700 text-white font-semibold text-sm rounded-xl transition-colors disabled:opacity-40 flex items-center justify-center gap-2 shadow-xs"
+          className="w-full py-3.5 bg-cyan-600 hover:bg-cyan-700 text-white font-semibold text-sm rounded-xl transition-colors disabled:opacity-40 flex items-center justify-center gap-2 shadow-xs cursor-pointer"
         >
           {analyzing ? (
             <>
@@ -286,13 +286,13 @@ export const ReportAnalyzer: React.FC<ReportAnalyzerProps> = ({ language, onNavi
 
         {/* Analysis Result Display */}
         {analysisResult && (
-          <div className="space-y-6 pt-4 border-t border-slate-100 animate-section-open">
-            <div className="flex items-center gap-2 text-emerald-600 font-bold text-xs uppercase tracking-wider">
+          <div className="space-y-6 pt-4 border-t border-slate-100 dark:border-slate-800 animate-section-open">
+            <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-bold text-xs uppercase tracking-wider">
               <CheckCircle2 className="w-4 h-4" />
               <span>{isUrdu ? 'لیبارٹری تجزیہ تیار ہے' : 'Laboratory Diagnostic Interpretation'}</span>
             </div>
 
-            <div className="bg-slate-50 p-6 rounded-2xl border border-slate-200 space-y-2 leading-relaxed">
+            <div className="bg-slate-50 dark:bg-slate-800/70 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-2 leading-relaxed">
               {renderFormattedMarkdown(analysisResult)}
             </div>
 
@@ -303,20 +303,20 @@ export const ReportAnalyzer: React.FC<ReportAnalyzerProps> = ({ language, onNavi
                   setSelectedFile(null);
                   setManualText('');
                 }}
-                className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl"
+                className="px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold rounded-xl cursor-pointer"
               >
-                Clear & Analyze Another
+                Clear &amp; Analyze Another
               </button>
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => onNavigate('tests')}
-                  className="px-4 py-2 bg-cyan-50 text-cyan-800 hover:bg-cyan-100 text-xs font-semibold rounded-xl border border-cyan-200"
+                  className="px-4 py-2 bg-cyan-50 dark:bg-cyan-950/70 text-cyan-800 dark:text-cyan-300 hover:bg-cyan-100 dark:hover:bg-cyan-900/70 text-xs font-semibold rounded-xl border border-cyan-200 dark:border-cyan-800 cursor-pointer"
                 >
                   Diagnostic Test Guide
                 </button>
                 <button
                   onClick={() => onNavigate('finder')}
-                  className="px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white text-xs font-semibold rounded-xl shadow-xs flex items-center gap-1.5"
+                  className="px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white text-xs font-semibold rounded-xl shadow-xs flex items-center gap-1.5 cursor-pointer"
                 >
                   <MapPin className="w-3.5 h-3.5" />
                   <span>Find Nearby Clinic / Lab</span>

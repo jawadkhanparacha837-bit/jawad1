@@ -1,18 +1,226 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
 @layer base {
+  :root,
+  [data-theme="light"] {
+    /* Core Surface & Text Tokens (Light Mode) */
+    --background: #f8fafc;
+    --foreground: #0f172a;
+    --card: #ffffff;
+    --card-foreground: #0f172a;
+    --surface: #f1f5f9;
+    --surface-elevated: #ffffff;
+    --secondary: #e2e8f0;
+    --secondary-foreground: #1e293b;
+    --muted: #f1f5f9;
+    --muted-foreground: #475569;
+    --border: #e2e8f0;
+    --input-bg: #f8fafc;
+    --input-fg: #0f172a;
+
+    /* Semantic Status Tokens */
+    --success: #059669;
+    --warning: #d97706;
+    --error: #dc2626;
+
+    /* Default Brand Accent (MediNova Cyan) */
+    --primary: #0891b2;
+    --primary-hover: #0e7490;
+    --primary-foreground: #ffffff;
+    --ring: #06b6d4;
+    --link: #0891b2;
+    --accent: #ecfeff;
+    --accent-foreground: #155e75;
+    --selected-bg: #ecfeff;
+    --selected-fg: #155e75;
+
+    color-scheme: light;
+  }
+
+  .dark,
+  [data-theme="dark"] {
+    /* Core Surface & Text Tokens (Dark Mode) */
+    --background: #020617;
+    --foreground: #f1f5f9;
+    --card: #0f172a;
+    --card-foreground: #f8fafc;
+    --surface: #1e293b;
+    --surface-elevated: #1e293b;
+    --secondary: #1e293b;
+    --secondary-foreground: #e2e8f0;
+    --muted: #1e293b;
+    --muted-foreground: #94a3b8;
+    --border: #1e293b;
+    --input-bg: #1e293b;
+    --input-fg: #f8fafc;
+
+    /* Semantic Status Tokens */
+    --success: #10b981;
+    --warning: #f59e0b;
+    --error: #ef4444;
+
+    /* Default Brand Accent (MediNova Cyan in Dark Mode) */
+    --primary: #06b6d4;
+    --primary-hover: #0891b2;
+    --primary-foreground: #ffffff;
+    --ring: #22d3ee;
+    --link: #22d3ee;
+    --accent: #083344;
+    --accent-foreground: #67e8f9;
+    --selected-bg: #083344;
+    --selected-fg: #67e8f9;
+
+    color-scheme: dark;
+  }
+
+  /* =========================================================
+     ACCENT COLOR PALETTES (Independent of Light/Dark Mode)
+     Maps Tailwind v4 --color-cyan-* and semantic --primary
+     tokens so all buttons, active tabs, badges, links, focus
+     rings, and highlights update across the entire website
+     while neutral body text remains high-contrast.
+     ========================================================= */
+
+  :root[data-accent="default"] {
+    --color-cyan-50: #ecfeff;
+    --color-cyan-100: #cffafe;
+    --color-cyan-200: #a5f3fc;
+    --color-cyan-300: #67e8f9;
+    --color-cyan-400: #22d3ee;
+    --color-cyan-500: #06b6d4;
+    --color-cyan-600: #0891b2;
+    --color-cyan-700: #0e7490;
+    --color-cyan-800: #155e75;
+    --color-cyan-900: #164e63;
+    --color-cyan-950: #083344;
+    --primary: #0891b2;
+    --primary-hover: #0e7490;
+    --primary-foreground: #ffffff;
+    --ring: #06b6d4;
+  }
+
+  :root[data-accent="pink"] {
+    --color-cyan-50: #fdf2f8;
+    --color-cyan-100: #fce7f3;
+    --color-cyan-200: #fbcfe8;
+    --color-cyan-300: #f9a8d4;
+    --color-cyan-400: #f472b6;
+    --color-cyan-500: #ec4899;
+    --color-cyan-600: #db2777;
+    --color-cyan-700: #be185d;
+    --color-cyan-800: #9d174d;
+    --color-cyan-900: #831843;
+    --color-cyan-950: #500724;
+    --primary: #db2777;
+    --primary-hover: #be185d;
+    --primary-foreground: #ffffff;
+    --ring: #ec4899;
+  }
+
+  :root[data-accent="emerald"] {
+    --color-cyan-50: #ecfdf5;
+    --color-cyan-100: #d1fae5;
+    --color-cyan-200: #a7f3d0;
+    --color-cyan-300: #6ee7b7;
+    --color-cyan-400: #34d399;
+    --color-cyan-500: #10b981;
+    --color-cyan-600: #059669;
+    --color-cyan-700: #047857;
+    --color-cyan-800: #065f46;
+    --color-cyan-900: #064e3b;
+    --color-cyan-950: #022c22;
+    --primary: #059669;
+    --primary-hover: #047857;
+    --primary-foreground: #ffffff;
+    --ring: #10b981;
+  }
+
+  :root[data-accent="blue"] {
+    --color-cyan-50: #eff6ff;
+    --color-cyan-100: #dbeafe;
+    --color-cyan-200: #bfdbfe;
+    --color-cyan-300: #93c5fd;
+    --color-cyan-400: #60a5fa;
+    --color-cyan-500: #3b82f6;
+    --color-cyan-600: #2563eb;
+    --color-cyan-700: #1d4ed8;
+    --color-cyan-800: #1e40af;
+    --color-cyan-900: #1e3a8a;
+    --color-cyan-950: #172554;
+    --primary: #2563eb;
+    --primary-hover: #1d4ed8;
+    --primary-foreground: #ffffff;
+    --ring: #3b82f6;
+  }
+
+  :root[data-accent="purple"] {
+    --color-cyan-50: #f5f3ff;
+    --color-cyan-100: #ede9fe;
+    --color-cyan-200: #ddd6fe;
+    --color-cyan-300: #c4b5fd;
+    --color-cyan-400: #a78bfa;
+    --color-cyan-500: #8b5cf6;
+    --color-cyan-600: #7c3aed;
+    --color-cyan-700: #6d28d9;
+    --color-cyan-800: #5b21b6;
+    --color-cyan-900: #4c1d95;
+    --color-cyan-950: #2e1065;
+    --primary: #7c3aed;
+    --primary-hover: #6d28d9;
+    --primary-foreground: #ffffff;
+    --ring: #8b5cf6;
+  }
+
+  :root[data-accent="teal"] {
+    --color-cyan-50: #f0fdfa;
+    --color-cyan-100: #ccfbf1;
+    --color-cyan-200: #99f6e4;
+    --color-cyan-300: #5eead4;
+    --color-cyan-400: #2dd4bf;
+    --color-cyan-500: #14b8a6;
+    --color-cyan-600: #0d9488;
+    --color-cyan-700: #0f766e;
+    --color-cyan-800: #115e59;
+    --color-cyan-900: #134e4a;
+    --color-cyan-950: #042f2e;
+    --primary: #0d9488;
+    --primary-hover: #0f766e;
+    --primary-foreground: #ffffff;
+    --ring: #14b8a6;
+  }
+
+  :root[data-accent="orange"] {
+    --color-cyan-50: #fff7ed;
+    --color-cyan-100: #ffedd5;
+    --color-cyan-200: #fed7aa;
+    --color-cyan-300: #fdba74;
+    --color-cyan-400: #fb923c;
+    --color-cyan-500: #f97316;
+    --color-cyan-600: #ea580c;
+    --color-cyan-700: #c2410c;
+    --color-cyan-800: #9a3412;
+    --color-cyan-900: #7c2d12;
+    --color-cyan-950: #431407;
+    --primary: #ea580c;
+    --primary-hover: #c2410c;
+    --primary-foreground: #ffffff;
+    --ring: #f97316;
+  }
+
   html {
     scroll-behavior: smooth;
   }
 
   body {
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    color: #0f172a;
-    background-color: #f8fafc;
+    color: var(--foreground);
+    background-color: var(--background);
     font-weight: 500;
     letter-spacing: -0.01em;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.25s ease, color 0.25s ease;
   }
 
   p {
@@ -34,6 +242,35 @@
   width: 100%;
   height: 100%;
   z-index: 10;
+}
+
+/* Dark mode styling for Leaflet popups, zoom controls, and attribution */
+.dark .leaflet-popup-content-wrapper,
+.dark .leaflet-popup-tip {
+  background-color: #0f172a;
+  color: #f1f5f9;
+  border: 1px solid #334155;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+}
+
+.dark .leaflet-bar a {
+  background-color: #1e293b;
+  color: #f1f5f9;
+  border-bottom-color: #334155;
+}
+
+.dark .leaflet-bar a:hover {
+  background-color: #334155;
+  color: var(--color-cyan-400, #38bdf8);
+}
+
+.dark .leaflet-control-attribution {
+  background-color: rgba(15, 23, 42, 0.85) !important;
+  color: #94a3b8 !important;
+}
+
+.dark .leaflet-control-attribution a {
+  color: var(--color-cyan-400, #38bdf8) !important;
 }
 
 /* Keyframes for rich, smooth animations */
@@ -237,6 +474,121 @@
   letter-spacing: 0.02em;
 }
 
+/* =========================================================
+   HOMEPAGE MEDICAL & AI BACKGROUND ANIMATIONS
+   ========================================================= */
+
+@keyframes ecgTrace {
+  0% {
+    stroke-dashoffset: 600;
+    opacity: 0.25;
+  }
+  45% {
+    opacity: 0.95;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0.25;
+  }
+}
+
+@keyframes floatSlow {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(0, -10px, 0) rotate(2deg);
+  }
+}
+
+@keyframes floatReverse {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(0, 9px, 0) rotate(-2deg);
+  }
+}
+
+@keyframes floatDiagonal {
+  0%, 100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(6px, -8px, 0);
+  }
+}
+
+@keyframes headingEntrance {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes sloganReveal {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0);
+    filter: blur(4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+    filter: blur(0px);
+  }
+}
+
+@keyframes nodePulse {
+  0%, 100% {
+    opacity: 0.35;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.22);
+  }
+}
+
+.animate-ecg-trace {
+  stroke-dasharray: 600;
+  stroke-dashoffset: 600;
+  animation: ecgTrace 4.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.animate-float-slow {
+  animation: floatSlow 6.5s ease-in-out infinite;
+  will-change: transform;
+}
+
+.animate-float-reverse {
+  animation: floatReverse 7.5s ease-in-out infinite;
+  will-change: transform;
+}
+
+.animate-float-diagonal {
+  animation: floatDiagonal 8.5s ease-in-out infinite;
+  will-change: transform;
+}
+
+.animate-heading-entrance {
+  animation: headingEntrance 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-slogan-reveal {
+  animation: sloganReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.18s both;
+}
+
+.animate-node-pulse {
+  animation: nodePulse 3.6s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
 /* Accessible reduced motion support */
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -247,4 +599,16 @@
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
   }
+
+  .reveal-on-scroll,
+  .reveal-on-scroll-scale {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .animate-ecg-trace {
+    stroke-dashoffset: 0 !important;
+    opacity: 0.65 !important;
+  }
 }
+

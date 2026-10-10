@@ -1,9 +1,25 @@
 export type Language = 'en' | 'ur';
 
+export type ThemeMode = 'light' | 'dark';
+
+export type AppearanceMode = 'light' | 'dark' | 'system';
+
+export type AccentColor =
+  | 'default'
+  | 'pink'
+  | 'emerald'
+  | 'blue'
+  | 'purple'
+  | 'teal'
+  | 'orange'
+  | 'custom';
+
 export type NavTab = 
   | 'home'
   | 'assistant'
+  | 'symptoms'
   | 'symptom-checker'
+  | 'reports'
   | 'report-analyzer'
   | 'finder'
   | 'medicines'
@@ -70,20 +86,95 @@ export interface LibraryArticle {
   keyTakeawaysUr: string[];
 }
 
+export interface FacilityDoctor {
+  name: string;
+  nameUr?: string;
+  specialty: string;
+  specialtyUr?: string;
+  qualification?: string;
+  schedule?: string;
+}
+
+export type SupportedCity =
+  | 'Islamabad'
+  | 'Rawalpindi'
+  | 'Lahore'
+  | 'Karachi'
+  | 'Peshawar'
+  | 'Quetta'
+  | 'Multan'
+  | 'Faisalabad';
+
+export interface CityLocality {
+  name: string;
+  nameUr: string;
+  lat: number;
+  lon: number;
+}
+
+export interface CityInfo {
+  name: SupportedCity;
+  nameUr: string;
+  province: string;
+  lat: number;
+  lon: number;
+  localities: CityLocality[];
+}
+
 export interface HealthcareFacility {
   id: string;
   name: string;
   nameUr?: string;
-  type: 'hospital' | 'clinic' | 'emergency' | 'pharmacy';
+  type: 'hospital' | 'clinic' | 'pharmacy';
+  city: SupportedCity | string;
+  locality: string;
+  localityUr?: string;
   address: string;
   addressUr?: string;
-  city: string;
-  lat: number;
-  lon: number;
+  lat?: number;
+  lon?: number;
   phone?: string;
+  emergencyPhone?: string;
+  website?: string;
+  rating?: number;
+  reviewCount?: number;
+  ratingSource?: string;
+  specialties: string[];
+  specialtiesUr?: string[];
+  openHours: string;
+  openHoursUr?: string;
+  opdTimings?: string;
+  opdTimingsUr?: string;
+  is24Hours?: boolean;
   hasEmergency: boolean;
-  openHours?: string;
+  emergencyDetails?: string;
+  emergencyDetailsUr?: string;
+  doctors?: FacilityDoctor[];
+  dataSource: string;
+  lastVerified: string;
   distanceKm?: number;
+  distanceSourceLabel?: string;
+}
+
+export interface EmergencyContactItem {
+  id: string;
+  name: string;
+  nameUr: string;
+  category: 'national' | 'ambulance' | 'hospital-er' | 'support';
+  categoryLabel: string;
+  categoryLabelUr: string;
+  number: string;
+  coverageArea: string;
+  coverageAreaUr: string;
+  cities: ('All' | SupportedCity)[];
+  description: string;
+  descriptionUr: string;
+  sourceUrl: string;
+  sourceName: string;
+  lastVerified: string;
+  bgColor: string;
+  borderColor: string;
+  textColor: string;
 }
 
 export interface BodySystemItem {
